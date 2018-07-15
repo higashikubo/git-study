@@ -33,3 +33,4 @@ ssh_keys:x:997:
 sshd:x:74:
 postdrop:x:90:
 postfix:x:89:
+chrony:x:996:
