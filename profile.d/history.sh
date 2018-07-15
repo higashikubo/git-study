@@ -1,0 +1,7 @@
+HISTTIMEFORMAT='%F %T '
+HISTSIZE=100000
+HISTFIKESIZE=100000
+HISTIGNORE='history:pwd:ls:ls *:ll:w:top:df *'
+HISTCONTROL=ignoreboth
+PROMPT_COMMAND='history -a; history -r'
+HISTFILESIZE=100000
