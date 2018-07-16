@@ -36,5 +36,5 @@ postfix:!::
 chrony:!::
 slocate:!::
 clamupdate:!::
-virusgroup:!::clamupdate
+virusgroup:!::clamupdate,clamscan
 clamscan:!::

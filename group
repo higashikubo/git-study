@@ -38,3 +38,4 @@ slocate:x:21:
 clamupdate:x:995:
 virusgroup:x:994:clamupdate,clamscan
 clamscan:x:993:
+ntp:x:38:
