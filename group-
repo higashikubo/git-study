@@ -34,3 +34,7 @@ sshd:x:74:
 postdrop:x:90:
 postfix:x:89:
 chrony:x:996:
+slocate:x:21:
+clamupdate:x:995:
+virusgroup:x:994:clamupdate
+clamscan:x:993:

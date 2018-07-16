@@ -1,4 +1,4 @@
-root:$6$5tLE7ayJe9Mjg4J7$kkDKp/7bQBhp12J1jxJsvFzH2PNbs6BmwXZHfWEnvomN9VA7EwKcN7gbfVYtgZ5pUYdFDWVq96rNTnjt9zcUr/:17726:0:99999:7:::
+root:$6$5tLE7ayJe9Mjg4J7$kkDKp/7bQBhp12J1jxJsvFzH2PNbs6BmwXZHfWEnvomN9VA7EwKcN7gbfVYtgZ5pUYdFDWVq96rNTnjt9zcUr/::0:99999:7:::
 bin:*:17632:0:99999:7:::
 daemon:*:17632:0:99999:7:::
 adm:*:17632:0:99999:7:::
@@ -17,3 +17,4 @@ polkitd:!!:17726::::::
 sshd:!!:17726::::::
 postfix:!!:17726::::::
 chrony:!!:17726::::::
+clamupdate:!!:17728::::::

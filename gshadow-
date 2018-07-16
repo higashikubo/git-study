@@ -34,3 +34,7 @@ sshd:!::
 postdrop:!::
 postfix:!::
 chrony:!::
+slocate:!::
+clamupdate:!::
+virusgroup:!::clamupdate
+clamscan:!::
