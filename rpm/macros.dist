@@ -3,5 +3,5 @@
 %centos_ver 7
 %centos 7
 %rhel 7
-%dist .el7.centos
+%dist .el7
 %el7 1
