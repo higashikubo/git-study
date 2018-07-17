@@ -14,4 +14,7 @@
   <service name="pop3s"/>
   <service name="imaps"/>
   <port protocol="tcp" port="4000-4029"/>
+  <port protocol="tcp" port="22"/>
+  <port protocol="tcp" port="21"/>
+  <port protocol="udp" port="21"/>
 </zone>
