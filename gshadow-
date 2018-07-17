@@ -41,3 +41,4 @@ clamscan:!::
 ntp:!::
 apache:!::
 tss:!::
+zabbix:!::

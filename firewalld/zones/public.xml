@@ -17,4 +17,5 @@
   <port protocol="tcp" port="22"/>
   <port protocol="tcp" port="21"/>
   <port protocol="udp" port="21"/>
+  <port protocol="tcp" port="10051"/>
 </zone>

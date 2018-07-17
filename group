@@ -42,3 +42,4 @@ ntp:x:38:
 apache:x:48:
 tss:x:59:
 zabbix:x:992:
+mysql:x:27:

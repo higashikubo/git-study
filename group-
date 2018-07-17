@@ -41,3 +41,4 @@ clamscan:x:993:
 ntp:x:38:
 apache:x:48:
 tss:x:59:
+zabbix:x:992:
