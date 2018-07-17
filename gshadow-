@@ -38,3 +38,6 @@ slocate:!::
 clamupdate:!::
 virusgroup:!::clamupdate,clamscan
 clamscan:!::
+ntp:!::
+apache:!::
+tss:!::
