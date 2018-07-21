@@ -16,3 +16,4 @@ NAME=wlp3s0
 UUID=e14b0524-d8ad-462d-9550-a054ca8ce0ff
 DEVICE=wlp3s0
 ONBOOT=yes
+ZONE=public
