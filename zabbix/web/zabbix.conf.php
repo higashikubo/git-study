@@ -12,7 +12,7 @@ $DB['PASSWORD'] = 'UltraSecret';
 // Schema name. Used for IBM DB2 and PostgreSQL.
 $DB['SCHEMA'] = '';
 
-$ZBX_SERVER      = 'localhost';
+$ZBX_SERVER      = '192.168.100.119';
 $ZBX_SERVER_PORT = '10051';
 $ZBX_SERVER_NAME = 'zabbix';
 
