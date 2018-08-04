@@ -45,3 +45,4 @@ zabbix:!::
 mysql:!::
 elasticsearch:!::
 logstash:!::
+kibana:!::
