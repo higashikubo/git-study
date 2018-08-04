@@ -46,5 +46,5 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 name=Dag RPM Repository for Redhat EL7
 baseurl=http://apt.sw.be/redhat/el$releasever/en/$basearch/dag
 gpgcheck=1
-enabled=1
+enabled=0
 gpgkey=http://dag.wieers.com/packages/RPM-GPG-KEY.dag.txt
