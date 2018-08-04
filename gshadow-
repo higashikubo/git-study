@@ -42,3 +42,6 @@ ntp:!::
 apache:!::
 tss:!::
 zabbix:!::
+mysql:!::
+elasticsearch:!::
+logstash:!::

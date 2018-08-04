@@ -43,3 +43,6 @@ apache:x:48:
 tss:x:59:
 zabbix:x:992:
 mysql:x:27:
+elasticsearch:x:991:
+logstash:x:990:
+kibana:x:989:
