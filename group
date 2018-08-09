@@ -47,3 +47,4 @@ elasticsearch:x:991:
 logstash:x:990:
 kibana:x:989:
 printadmin:x:988:
+nginx:x:987:

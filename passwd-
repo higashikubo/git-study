@@ -26,3 +26,4 @@ zabbix:x:995:992:Zabbix Monitoring System:/var/lib/zabbix:/sbin/nologin
 mysql:x:27:27:MariaDB Server:/var/lib/mysql:/sbin/nologin
 elasticsearch:x:994:991:elasticsearch user:/home/elasticsearch:/sbin/nologin
 logstash:x:993:990:logstash:/usr/share/logstash:/sbin/nologin
+kibana:x:992:989:kibana service user:/home/kibana:/sbin/nologin
