@@ -47,3 +47,4 @@ elasticsearch:!::
 logstash:!::
 kibana:!::
 printadmin:!::
+nginx:!::
