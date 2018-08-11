@@ -60,7 +60,7 @@
           description: >
             Error type.
 - key: cloud
-  title: Cloud Provider Metadata
+  title: Cloud provider metadata
   description: >
     Metadata from cloud providers added by the add_cloud_metadata processor.
   fields:
@@ -97,10 +97,8 @@
       description: >
         Region in which this host is running.
 - key: docker
-  title: docker
+  title: Docker
   description: >
-    beta[]
-
     Docker stats collected from Docker.
   short_config: false
   anchor: docker-processor
@@ -125,11 +123,42 @@
           object_type: keyword
           description: >
             Image labels.
-- key: kubernetes
-  title: kubernetes
+- key: host
+  title: Host
   description: >
-    beta[]
-
+    Info collected for the host machine.
+  anchor: host-processor
+  fields:
+    - name: host
+      type: group
+      fields:
+        - name: name
+          type: keyword
+          description: >
+            Hostname.
+        - name: id
+          type: keyword
+          description: >
+            Unique host id.
+        - name: architecture
+          type: keyword
+          description: >
+            Host architecture (e.g. x86_64, arm, ppc, mips).
+        - name: os.platform
+          type: keyword
+          description: >
+            OS platform (e.g. centos, ubuntu, windows).
+        - name: os.version
+          type: keyword
+          description: >
+            OS version.
+        - name: os.family
+          type: keyword
+          description: >
+            OS family (e.g. redhat, debian, freebsd, windows).
+- key: kubernetes
+  title: Kubernetes
+  description: >
     Kubernetes metadata added by the kubernetes processor
   short_config: false
   anchor: kubernetes-processor
@@ -146,6 +175,11 @@
           type: keyword
           description: >
             Kubernetes namespace
+
+        - name: node.name
+          type: keyword
+          description: >
+            Kubernetes node name
 
         - name: labels
           type: object
@@ -200,14 +234,13 @@
       required: true
       example: metricsets
       description: >
-        The document type. Always set to "metricsets".
+        The document type. Always set to "doc".
 
 - key: aerospike
   title: "Aerospike"
   description: >
-    []experimental
-
     Aerospike module
+  release: beta
   fields:
     - name: aerospike
       type: group
@@ -217,6 +250,7 @@
           type: group
           description: >
             namespace
+          release: beta
           fields:
             - name: client
               type: group
@@ -376,6 +410,8 @@
   description: >
     Apache HTTPD server metricsets collected from the Apache web server.
   short_config: false
+  release: ga
+  settings: ["ssl"]
   fields:
     - name: apache
       type: group
@@ -384,6 +420,7 @@
       fields:
         - name: status
           type: group
+          release: ga
           description: >
             `status` contains the metrics that were scraped from the Apache status page.
           fields:
@@ -555,10 +592,10 @@
 - key: ceph
   title: "Ceph"
   description: >
-    beta[]
-
     Ceph module
   short_config: false
+  release: beta
+  settings: ["ssl"]
   fields:
     - name: ceph
       type: group
@@ -569,6 +606,7 @@
           type: group
           description: >
             cluster_disk
+          release: beta
           fields:
             - name: available.bytes
               type: long
@@ -590,6 +628,7 @@
           type: group
           description: >
             cluster_health
+          release: beta
           fields:
             - name: overall_status
               type: keyword
@@ -608,8 +647,124 @@
               description: >
                 Status of the round
 
+        - name: cluster_status
+          type: group
+          release: beta
+          description: >
+            cluster_status
+          fields:
+            - name: version
+              type: long
+              description: >
+                Ceph Status version
+            - name: traffic.read_bytes
+              type: long
+              format: bytes
+              description: >
+                Cluster read throughput per second
+            - name: traffic.write_bytes
+              type: long
+              format: bytes
+              description: >
+                Cluster write throughput per second
+            - name: traffic.read_op_per_sec
+              type: long
+              description: >
+                Cluster read iops per second
+            - name: traffic.write_op_per_sec
+              type: long
+              description: >
+                Cluster write iops per second
+            - name: misplace.total
+              type: long
+              description: >
+                Cluster misplace pg number
+            - name: misplace.objects
+              type: long
+              description: >
+                Cluster misplace objects number
+            - name: misplace.ratio
+              type: scaled_float
+              format: percent
+              description: >
+                Cluster misplace ratio
+            - name: degraded.total
+              type: long
+              description: >
+                Cluster degraded pg number
+            - name: degraded.objects
+              type: long
+              description: >
+                Cluster degraded objects number
+            - name: degraded.ratio
+              type: scaled_float
+              format: percent
+              description: >
+                Cluster degraded ratio
+            - name: pg.data_bytes
+              type: long
+              format: bytes
+              description: >
+                Cluster pg data bytes
+            - name: pg.avail_bytes
+              type: long
+              format: bytes
+              description: >
+                Cluster available bytes
+            - name: pg.total_bytes
+              type: long
+              format: bytes
+              description: >
+                Cluster total bytes
+            - name: pg.used_bytes
+              type: long
+              format: bytes
+              description: >
+                Cluster used bytes
+            - name: pg_state.state_name
+              type: long
+              description: >
+                Pg state description
+            - name: pg_state.count
+              type: long
+              description: >
+                Shows how many pgs are in state of pg_state.state_name
+            - name: pg_state.version
+              type: long
+              description: >
+                Cluster status version
+            - name: osd.full
+              type: boolean
+              description: >
+                Is osd full
+            - name: osd.nearfull
+              type: boolean
+              description: >
+                Is osd near full
+            - name: osd.num_osds
+              type: long
+              description: >
+                Shows how many osds in the cluster
+            - name: osd.num_up_osds
+              type: long
+              description: >
+                Shows how many osds are on the state of UP
+            - name: osd.num_in_osds
+              type: long
+              description: >
+                Shows how many osds are on the state of IN
+            - name: osd.num_remapped_pgs
+              type: long
+              description: >
+                Shows how many osds are on the state of REMAPPED
+            - name: osd.epoch
+              type: long
+              description: >
+                epoch number
+
         - name: monitor_health
           type: group
+          release: beta
           description: >
             monitor_health stats data
           fields:
@@ -666,10 +821,113 @@
               description: >
                 Last updated
 
+        - name: osd_df
+          type: group
+          release: experimental
+          description: >
+            ceph osd disk usage information
+          fields:
+            - name: id
+              type: long
+              description: >
+                osd node id
+            - name: name
+              type: text
+              description: >
+                osd node name
+            - name: device_class
+              type: keyword
+              description: >
+                osd node type, illegal type include hdd, ssd etc.
+            - name: total.byte
+              type: long
+              format: bytes
+              description: >
+                osd disk total volume
+            - name: used.byte
+              type: long
+              format: bytes
+              description: >
+                osd disk usage volume
+            - name: available.bytes
+              type: long
+              format: bytes
+              description: >
+                osd disk available volume
+            - name: pg_num
+              type: long
+              description: >
+                shows how many pg located on this osd
+            - name: used.pct
+              type: scaled_float
+              format: percent
+              description: >
+                osd disk usage percentage
+
+        - name: osd_tree
+          type: group
+          description: >
+            ceph osd tree info
+          release: beta
+          fields:
+            - name: id
+              type: long
+              description: >
+                osd or bucket node id
+            - name: name
+              type: text
+              description: >
+                osd or bucket node name
+            - name: type
+              type: keyword
+              description: >
+                osd or bucket node type, illegal type include osd, host, root etc.
+            - name: type_id
+              type: long
+              description: >
+                osd or bucket node typeID
+            - name: children
+              type: text
+              description: >
+                bucket children list, separated by comma.
+            - name: crush_weight
+              type: float
+              description: >
+                osd node crush weight
+            - name: depth
+              type: long
+              description: >
+                node depth
+            - name: exists
+              type: boolean
+              description: >
+                is node still exist or not(1-yes, 0-no)
+            - name: primary_affinity
+              type: float
+              description: >
+                the weight of reading data from primary osd
+            - name: reweight
+              type: long
+              description: >
+                the reweight of osd
+            - name: status
+              type: keyword
+              description: >
+                status of osd, it should be up or down
+            - name: device_class
+              type: keyword
+              description: >
+                the device class of osd, like hdd, ssd etc.
+            - name: father
+              type: keyword
+              description: >
+                the parent node of this osd or bucket node
+
         - name: pool_disk
           type: group
           description: >
             pool_disk
+          release: beta
           fields:
             - name: id
               type: long
@@ -701,10 +959,10 @@
 - key: couchbase
   title: "Couchbase"
   description: >
-    beta[]
-
     Metrics collected from Couchbase servers.
   short_config: false
+  release: beta
+  settings: ["ssl"]
   fields:
     - name: couchbase
       type: group
@@ -715,6 +973,7 @@
           type: group
           description: >
             Couchbase bucket metrics.
+          release: beta
           fields:
             - name: name
               type: keyword
@@ -766,6 +1025,7 @@
           type: group
           description: >
             Couchbase cluster metrics.
+          release: beta
           fields:
             - name: hdd.free.bytes
               format: bytes
@@ -844,6 +1104,7 @@
           type: group
           description: >
             Couchbase node metrics.
+          release: beta
           fields:
             - name: cmd_get
               type: long
@@ -944,9 +1205,8 @@
 - key: docker
   title: "Docker"
   description: >
-    beta[]
-
     Docker stats collected from Docker.
+  release: ga
   short_config: false
   fields:
     - name: docker
@@ -958,6 +1218,7 @@
           type: group
           description: >
             Docker container metrics.
+          release: ga
           fields:
             - name: command
               type: keyword
@@ -971,6 +1232,10 @@
               type: keyword
               description: >
                 Container status.
+            - name: ip_addresses
+              type: keyword
+              description: >
+                Container IP addresses.
             - name: size
               type: group
               description: >
@@ -993,20 +1258,22 @@
           type: group
           description: >
             Runtime CPU metrics.
+          release: ga
           fields:
             - name: kernel.pct
               type: scaled_float
               format: percentage
               description: >
-                The system kernel consumed by the Docker server.
+                Percentage of time in kernel space.
             - name: kernel.ticks
               type: long
               description: >
-                CPU kernel ticks.
+                CPU ticks in kernel space.
             - name: system.pct
               type: scaled_float
               format: percentage
               description: >
+                Percentage of total CPU time in the system.
             - name: system.ticks
               type: long
               description: >
@@ -1015,43 +1282,109 @@
               type: scaled_float
               format: percentage
               description: >
+                Percentage of time in user space.
             - name: user.ticks
               type: long
               description: >
-                CPU user ticks
+                CPU ticks in user space.
             - name: total.pct
               type: scaled_float
               format: percentage
               description: >
                 Total CPU usage.
-            # TODO: how to document cpu list?
-            #- name: core
-            #  type: array
-            #  description: >
-            #    Dictionary with list of cpu and usage inside.
+            - name: core.*.pct
+              type: object
+              object_type: scaled_float
+              format: percentage
+              description: >
+                Percentage of CPU time in this core.
+            - name: core.*.ticks
+              type: object
+              object_type: long
+              description: >
+                Number of CPU ticks in this core.
 
         - name: diskio
           type: group
           description: >
             Disk I/O metrics.
+          release: ga
           fields:
+            - name: read
+              type: group
+              description: >
+                Accumulated reads during the life of the container
+              fields:
+                - name: ops
+                  type: long
+                  description: >
+                    Number of reads during the life of the container
+                - name: bytes
+                  type: long
+                  format: bytes
+                  description: >
+                    Bytes read during the life of the container
+                - name: rate
+                  type: long
+                  description: >
+                    Number of current reads per second
             - name: reads
               type: scaled_float
+              deprecated: true
               description: >
-                Number of reads.
+                Number of current reads per second
+            - name: write
+              type: group
+              description: >
+                Accumulated writes during the life of the container
+              fields:
+                - name: ops
+                  type: long
+                  description: >
+                    Number of writes during the life of the container
+                - name: bytes
+                  type: long
+                  format: bytes
+                  description: >
+                    Bytes written during the life of the container
+                - name: rate
+                  type: long
+                  description: >
+                    Number of current writes per second
             - name: writes
               type: scaled_float
+              deprecated: true
               description: >
-                Number of writes.
+                Number of current writes per second
+            - name: summary
+              type: group
+              description: >
+                Accumulated reads and writes during the life of the container
+              fields:
+                - name: ops
+                  type: long
+                  description: >
+                    Number of I/O operations during the life of the container
+                - name: bytes
+                  type: long
+                  format: bytes
+                  description: >
+                    Bytes read and written during the life of the container
+                - name: rate
+                  type: long
+                  description: >
+                    Number of current operations per second
             - name: total
               type: scaled_float
+              deprecated: true
               description: >
-                Number of reads and writes combined.
+                Number of reads and writes per second
 
         - name: healthcheck
           type: group
           description: >
             Docker container metrics.
+          release: ga
           fields:
             - name: failingstreak
               type: integer
@@ -1087,6 +1420,7 @@
           type: group
           description: >
             Docker image metrics.
+          release: ga
           fields:
             - name: id
               type: group
@@ -1133,9 +1467,8 @@
         - name: info
           type: group
           description: >
-            beta[]
-
             Info metrics based on https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/display-system-wide-information.
+          release: ga
           fields:
             - name: containers
               type: group
@@ -1172,6 +1505,7 @@
           type: group
           description: >
             Memory metrics.
+          release: ga
           fields:
 
             - name: fail.count
@@ -1223,6 +1557,7 @@
           type: group
           description: >
             Network metrics.
+          release: ga
           fields:
 
             - name: interface
@@ -1231,8 +1566,9 @@
                 Network interface name.
             - name: in
               type: group
+              deprecated: true
               description: >
-                Incoming network stats.
+                Incoming network stats per second.
               fields:
                 - name: bytes
                   type: long
@@ -1253,8 +1589,9 @@
                     Total number of incoming packets.
             - name: out
               type: group
+              deprecated: true
               description: >
-                Outgoing network stats.
+                Outgoing network stats per second.
               fields:
                 - name: bytes
                   type: long
@@ -1273,26 +1610,73 @@
                   type: long
                   description: >
                     Total number of outgoing packets.
+            - name: inbound
+              type: group
+              deprecated: true
+              description: >
+                Incoming network stats since the container started.
+              fields:
+                - name: bytes
+                  type: long
+                  format: bytes
+                  description: >
+                    Total number of incoming bytes.
+                - name: dropped
+                  type: long
+                  description: >
+                    Total number of dropped incoming packets.
+                - name: errors
+                  type: long
+                  description: >
+                    Total errors on incoming packets.
+                - name: packets
+                  type: long
+                  description: >
+                    Total number of incoming packets.
+            - name: outbound
+              type: group
+              deprecated: true
+              description: >
+                Outgoing network stats since the container started.
+              fields:
+                - name: bytes
+                  type: long
+                  format: bytes
+                  description: >
+                    Total number of outgoing bytes.
+                - name: dropped
+                  type: long
+                  description: >
+                    Total number of dropped outgoing packets.
+                - name: errors
+                  type: long
+                  description: >
+                    Total errors on outgoing packets.
+                - name: packets
+                  type: long
+                  description: >
+                    Total number of outgoing packets.
 
 - key: dropwizard
   title: "Dropwizard"
   description: >
-    beta[]
-
     Stats collected from Dropwizard.
+  release: beta
+  settings: ["ssl"]
   short_config: false
   fields:
     - name: dropwizard
       type: group
       description: >
       fields:
+        - release: beta
 
 - key: elasticsearch
   title: "Elasticsearch"
   description: >
-    []experimental
-
     Elasticsearch module
+  release: beta
+  settings: ["ssl"]
   short_config: false
   fields:
     - name: elasticsearch
@@ -1307,16 +1691,8 @@
           type: group
           description: >
             node
+          release: beta
           fields:
-            - name: jvm.memory.heap_init.bytes
-              type: long
-              format: bytes
-              description: >
-                Heap init used by the JVM in bytes.
-            - name: jvm.version
-              type: keyword
-              description: >
-                JVM version.
             - name: name
               type: keyword
               description: >
@@ -1325,11 +1701,45 @@
               type: keyword
               description: >
                 Node version.
+            - name: jvm
+              type: group
+              description: >
+                JVM Info.
+              fields:
+                - name: version
+                  type: keyword
+                  description: >
+                    JVM version.
+                - name: memory.heap.init.bytes
+                  type: long
+                  format: bytes
+                  description: >
+                    Heap init used by the JVM in bytes.
+                - name: memory.heap.max.bytes
+                  type: long
+                  format: bytes
+                  description: >
+                    Heap max used by the JVM in bytes.
+                - name: memory.nonheap.init.bytes
+                  type: long
+                  format: bytes
+                  description: >
+                    Non-Heap init used by the JVM in bytes.
+                - name: memory.nonheap.max.bytes
+                  type: long
+                  format: bytes
+                  description: >
+                    Non-Heap max used by the JVM in bytes.
+            - name: process.mlockall
+              type: boolean
+              description: >
+                If process locked in memory.
 
         - name: node.stats
           type: group
           description: >
             node_stats
+          release: beta
           fields:
             - name: indices
               type: group
@@ -1466,11 +1876,190 @@
                       type: long
                       description: >
 
+            - name: fs.summary
+              type: group
+              description: >
+                File system summary
+              fields:
+                - name: total.bytes
+                  type: long
+                  format: bytes
+                  description: >
+                - name: free.bytes
+                  type: long
+                  format: bytes
+                  description: >
+                - name: available.bytes
+                  type: long
+                  format: bytes
+                  description: >
+
+- key: etcd
+  title: "Etcd"
+  description: >
+    etcd Module
+  release: beta
+  settings: ["ssl"]
+  fields:
+    - name: etcd
+      type: group
+      description: >
+        `etcd` contains statistics that were read from Etcd
+      fields:
+        - name: leader
+          type: group
+          description: >
+            Contains etcd leader statistics.
+          release: beta
+          fields:
+            - name: followers.counts
+              type: group
+              description: >
+                The number of failed and successful Raft RPC requests.
+              fields:
+                - name: followers.counts.success
+                  type: integer
+                - name: followers.counts.fail
+                  type: integer
+
+
+            - name: followers.latency
+              type: group
+              description: >
+                 latency to each peer in the cluster
+              fields:
+                - name: followers.latency.average
+                  type: scaled_float
+                - name: followers.latency.current
+                  type: scaled_float
+                - name: followers.latency.maximum
+                  type: scaled_float
+                - name: followers.latency.minimum
+                  type: integer
+                - name: follower.latency.standardDeviation
+                  type: scaled_float
+            - name: leader
+              type: keyword
+
+
+        - name: self
+          type: group
+          description: >
+            Contains etcd self statistics.
+          release: beta
+          fields:
+            - name: id
+              type: keyword
+              description: >
+               the unique identifier for the member
+
+            - name: leaderinfo.leader
+              type: keyword
+              description: >
+                id of the current leader member
+            - name: leaderinfo.starttime
+              type: keyword
+            - name: leaderinfo.uptime
+              type: keyword
+              description: >
+                id of the current leader member
+
+            - name: name
+              type: keyword
+              description: >
+                this member's name
+
+            - name: recv.appendrequest.count
+              type: integer
+              description: >
+                number of append requests this node has processed
+            - name: recv.bandwithrate
+              type: scaled_float
+              description: >
+                number of bytes per second this node is receiving (follower only)
+            - name: recv.pkgrate
+              type: scaled_float
+              description: >
+                number of requests per second this node is receiving (follower only)
+
+            - name: send.appendrequest.count
+              type: integer
+              description: >
+                 number of requests that this node has sent
+            - name: send.bandwithrate
+              type: scaled_float
+              description: >
+                number of bytes per second this node is sending (leader only). This value is undefined on single member clusters.
+            - name: send.pkgrate
+              type: scaled_float
+              description: >
+                number of requests per second this node is sending (leader only). This value is undefined on single member clusters.
+
+            - name: starttime
+              type: keyword
+              description: >
+                the time when this node was started
+
+            - name: state
+              type: keyword
+              description: >
+                either leader or follower
+
+        - name: store
+          type: group
+          description: >
+            The store statistics include information about the operations that this node has handled.
+          release: beta
+          fields:
+            - name: gets.success
+              type: integer
+            - name: gets.fail
+              type: integer
+
+            - name: sets.success
+              type: integer
+            - name: sets.fail
+              type: integer
+
+            - name: delete.success
+              type: integer
+            - name: delete.fail
+              type: integer
+
+            - name: update.success
+              type: integer
+            - name: update.fail
+              type: integer
+
+            - name: create.success
+              type: integer
+            - name: create.fail
+              type: integer
+
+            - name: compareandswap.success
+              type: integer
+            - name: compareandswap.fail
+              type: integer
+
+            - name: compareanddelete.success
+              type: integer
+            - name: compareanddelete.fail
+              type: integer
+
+
+            - name: expire.count
+              type: integer
+
+            - name: watchers
+              type: integer
+
 - key: golang
   title: "Golang"
   description: >
     Golang module
   short_config: false
+  release: beta
+  settings: ["ssl"]
   fields:
     - name: golang
       type: group
@@ -1480,15 +2069,18 @@
           type: group
           description: >
             expvar
+          release: beta
           fields:
             - name: cmdline
               type: keyword
               description: >
                 The cmdline of this golang program start with.
+
         - name: heap
           type: group
           description: >
             The golang program heap information exposed by expvar.
+          release: beta
           fields:
             - name: cmdline
               type: keyword
@@ -1569,7 +2161,7 @@
                   format: bytes
                   description: >
                     Total bytes obtained from system (sum of XxxSys below).
-                - name: optained
+                - name: obtained
                   type: long
                   format: bytes
                   description: >
@@ -1622,11 +2214,34 @@
                   format: bytes
                   description: >
                     Bytes in non-idle span.
+
+- key: graphite
+  title: "Graphite"
+  description: >
+    graphite Module
+  release: beta
+  fields:
+    - name: graphite
+      type: group
+      description: >
+      fields:
+        - name: server
+          type: group
+          description: >
+            server
+          release: beta
+          fields:
+            - name: example
+              type: keyword
+              description: >
+                Example field
+
 - key: haproxy
   title: "HAProxy"
   description: >
     HAProxy Module
   short_config: false
+  release: ga
   fields:
     - name: haproxy
       type: group
@@ -1637,6 +2252,7 @@
           type: group
           description: >
             General information about HAProxy processes.
+          release: ga
           fields:
             - name: processes
               type: long
@@ -1874,6 +2490,7 @@
           type: group
           description: >
             Stats collected from HAProxy processes.
+          release: ga
           fields:
 
             - name: status
@@ -1970,7 +2587,7 @@
                   type: long
                   description: >
                     Requests denied because of security concerns.
-            
+
                       * For TCP this is because of a matched tcp-request content rule.
                       * For HTTP this is because of a matched http-request or tarpit rule.
 
@@ -1989,7 +2606,7 @@
                   type: long
                   description: >
                     Request errors. Some of the possible causes are:
-            
+
                       * early termination from the client, before the request has been sent
                       * read error from the client
                       * client timeout
@@ -2040,7 +2657,7 @@
                   type: long
                   description: >
                     Number of response errors. This value includes the number of data
-                    transfers aborted by the server (haproxy.stat.server.aborted). 
+                    transfers aborted by the server (haproxy.stat.server.aborted).
                     Some other errors are:
 
                     * write errors on the client socket (won't be counted for the server stat)
@@ -2141,7 +2758,7 @@
                   type: keyword
                   description: >
                     Status of the last health check. One of:
-            
+
                       UNK     -> unknown
                       INI     -> initializing
                       SOCKERR -> socket error
@@ -2221,7 +2838,7 @@
                   type: integer
                   description: >
                     Number of backend servers that are active, meaning that they are
-                    healthy and can receive requests from the load balancer. 
+                    healthy and can receive requests from the load balancer.
 
                 - name: backup
                   type: integer
@@ -2298,6 +2915,8 @@
   title: "HTTP"
   description: >
     HTTP module
+  release: ga
+  settings: ["ssl"]
   fields:
     - name: http
       type: group
@@ -2309,7 +2928,7 @@
               HTTP request information
           fields:
             - name: header
-              type: nested
+              type: object
               description: >
                 The HTTP headers sent
             - name: method
@@ -2326,13 +2945,19 @@
               HTTP response information
           fields:
             - name: header
-              type: nested
+              type: object
               description: >
                 The HTTP headers received
-            - name: status_code
+            - name: code
               type: keyword
               description: >
                 The HTTP status code
+              example: 404
+            - name: phrase
+              type: keyword
+              example: Not found
+              description: >
+                The HTTP status phrase
             - name: body
               type: keyword
               description: >
@@ -2341,29 +2966,37 @@
           type: group
           description: >
             json metricset
+          release: ga
+          fields:
+
+        - name: server
+          type: group
+          description: >
+            server
+          release: beta
           fields:
 
 - key: jolokia
   title: "Jolokia"
   description: >
-    []beta
-
     Jolokia module
   short_config: false
+  release: ga
+  settings: ["ssl"]
   fields:
     - name: jolokia
       type: group
       description: >
           jolokia contains metrics exposed via jolokia agent
       fields:
+        - release: ga
 
 - key: kafka
   title: "Kafka"
   description: >
     Kafka module
-
-    beta[]
   short_config: false
+  release: beta
   fields:
     - name: kafka
       type: group
@@ -2373,6 +3006,7 @@
           type: group
           description: >
             consumergroup
+          release: beta
           fields:
             - name: broker
               type: group
@@ -2436,6 +3070,7 @@
           type: group
           description: >
             partition
+          release: beta
           fields:
             - name: offset
               type: group
@@ -2507,10 +3142,10 @@
 - key: kibana
   title: "Kibana"
   description: >
-    []experimental
-
     Kibana module
   short_config: false
+  release: beta
+  settings: ["ssl"]
   fields:
     - name: kibana
       type: group
@@ -2520,6 +3155,7 @@
           type: group
           description: >
             Status fields
+          release: beta
           fields:
             - name: name
               type: keyword
@@ -2563,9 +3199,9 @@
 - key: kubernetes
   title: "Kubernetes"
   description: >
-    beta[]
-
     Kubernetes metrics
+  release: ga
+  settings: ["ssl"]
   short_config: false
   fields:
     - name: kubernetes
@@ -2577,6 +3213,7 @@
           type: group
           description: >
             kubernetes container metrics
+          release: ga
           fields:
             - name: start_time
               type: date
@@ -2601,6 +3238,16 @@
                       type: long
                       description: >
                         CPU used nanocores
+                    - name: node.pct
+                      type: scaled_float
+                      format: percentage
+                      description: >
+                        CPU usage as a percentage of the total node allocatable CPU
+                    - name: limit.pct
+                      type: scaled_float
+                      format: percentage
+                      description: >
+                        CPU usage as a percentage of the defined limit for the container (or total node allocatable CPU if unlimited)
             - name: logs
               type: group
               description: >
@@ -2664,6 +3311,16 @@
                       format: bytes
                       description: >
                         Total memory usage
+                    - name: node.pct
+                      type: scaled_float
+                      format: percentage
+                      description: >
+                        Memory usage as a percentage of the total node allocatable memory
+                    - name: limit.pct
+                      type: scaled_float
+                      format: percentage
+                      description: >
+                        Memory usage as a percentage of the defined limit for the container (or total node allocatable memory if unlimited)
                 - name: rss
                   type: group
                   fields:
@@ -2728,11 +3385,12 @@
           description: >
             The Kubernetes events metricset collects events that are generated by objects running
             inside of Kubernetes
+          release: beta
           fields:
           - name: count
             type: long
             description: >
-              Count field records the number of times the particular event has occured
+              Count field records the number of times the particular event has occurred
             fields:
             - name: timestamp
               type: group
@@ -2819,11 +3477,8 @@
           type: group
           description: >
             kubernetes node metrics
+          release: ga
           fields:
-            - name: name
-              type: keyword
-              description: >
-                Node name
             - name: start_time
               type: date
               description: >
@@ -2994,6 +3649,7 @@
           type: group
           description: >
             kubernetes pod metrics
+          release: ga
           fields:
             - name: start_time
               type: date
@@ -3026,11 +3682,55 @@
                       type: long
                       description: >
                         Tx errors
+            - name: cpu
+              type: group
+              description: >
+                CPU usage metrics
+              fields:
+                - name: usage
+                  type: group
+                  fields:
+                    - name: nanocores
+                      type: long
+                      description: >
+                        CPU used nanocores
+                    - name: node.pct
+                      type: scaled_float
+                      format: percentage
+                      description: >
+                        CPU usage as a percentage of the total node CPU
+                    - name: limit.pct
+                      type: scaled_float
+                      format: percentage
+                      description: >
+                        CPU usage as a percentage of the defined limit for the pod containers (or total node CPU if unlimited)
+            - name: memory
+              type: group
+              fields:
+                - name: usage
+                  type: group
+                  fields:
+                    - name: bytes
+                      type: long
+                      format: bytes
+                      description: >
+                        Total memory usage
+                    - name: node.pct
+                      type: scaled_float
+                      format: percentage
+                      description: >
+                        Memory usage as a percentage of the total node allocatable memory
+                    - name: limit.pct
+                      type: scaled_float
+                      format: percentage
+                      description: >
+                        Memory usage as a percentage of the defined limit for the pod containers (or total node allocatable memory if unlimited)
 
         - name: container
           type: group
           description: >
             kubernetes container metrics
+          release: ga
           fields:
             - name: id
               type: keyword
@@ -3080,6 +3780,7 @@
           type: group
           description: >
             kubernetes deployment metrics
+          release: ga
           fields:
             - name: name
               type: keyword
@@ -3115,6 +3816,7 @@
           type: group
           description: >
             kubernetes node metrics
+          release: ga
           fields:
             - name: status
               type: group
@@ -3131,7 +3833,7 @@
               type: group
               fields:
                 - name: allocatable.cores
-                  type: long
+                  type: float
                   description: >
                     Node CPU allocatable cores
                 - name: capacity.cores
@@ -3167,6 +3869,7 @@
           type: group
           description: >
             kubernetes pod metrics
+          release: ga
           fields:
             - name: ip
               type: ip
@@ -3198,6 +3901,7 @@
           type: group
           description: >
             kubernetes replica set metrics
+          release: ga
           fields:
             - name: name
               type: keyword
@@ -3229,10 +3933,52 @@
                   description: >
                     The number of fully labeled replicas per ReplicaSet
 
+        - name: statefulset
+          type: group
+          description: >
+            kubernetes stateful set metrics
+          release: ga
+          fields:
+            - name: name
+              type: keyword
+              description: >
+                Kubernetes stateful set name
+            - name: created
+              type: long
+              description: >
+                The creation timestamp (epoch) for StatefulSet
+            - name: replicas
+              type: group
+              description: >
+                Kubernetes stateful set replicas status
+              fields:
+                - name: observed
+                  type: long
+                  description: >
+                    The number of observed replicas per StatefulSet
+                - name: desired
+                  type: long
+                  description: >
+                    The number of desired replicas per StatefulSet
+            - name: generation
+              type: group
+              description: >
+                Kubernetes stateful set generation information
+              fields:
+                - name: observed
+                  type: long
+                  description: >
+                    The observed generation per StatefulSet
+                - name: desired
+                  type: long
+                  description: >
+                    The desired generation per StatefulSet
+
         - name: system
           type: group
           description: >
             kubernetes system containers metrics
+          release: ga
           fields:
             - name: container
               type: keyword
@@ -3301,6 +4047,7 @@
           type: group
           description: >
             kubernetes volume metrics
+          release: ga
           fields:
             - name: name
               type: keyword
@@ -3349,13 +4096,113 @@
                       description: >
                         Total inodes
 
+- key: kvm
+  title: "kvm"
+  description: >
+    experimental[]
+
+    kvm module
+  fields:
+    - name: kvm
+      type: group
+      description: >
+      fields:
+        - name: dommemstat
+          type: group
+          description: >
+            dommemstat
+          fields:
+              - name: stat
+                type: group
+                description: >
+                  Memory stat
+                fields:
+                  - name: name
+                    type: keyword
+                    description: >
+                      Memory stat name
+                  - name: value
+                    type: long
+                    description: >
+                      Memory stat value
+              - name: id
+                type: long
+                description: >
+                  Domain id
+              - name: name
+                type: keyword
+                description: >
+                  Domain name
+
+- key: logstash
+  title: "Logstash"
+  description: >
+    Logstash module
+  release: beta
+  settings: ["ssl"]
+  fields:
+    - name: logstash
+      type: group
+      description: >
+      fields:
+        - name: node
+          type: group
+          description: >
+            node
+          release: beta
+          fields:
+            - name: host
+              type: keyword
+              description: >
+                Host name
+            - name: version
+              type: keyword
+              description: >
+                Logstash Version
+            - name: jvm
+              type: group
+              description: >
+                JVM Info
+              fields:
+                - name: version
+                  type: keyword
+                  description: >
+                    Version
+                - name: pid
+                  type: long
+                  description: >
+                    Pid
+
+        - name: node.stats
+          type: group
+          description: >
+            node_stats metrics.
+          release: beta
+          fields:
+            - name: events
+              type: group
+              description: >
+                Events stats
+              fields:
+                - name: in
+                  type: long
+                  description: >
+                    Incoming events counter.
+                - name: out
+                  type: long
+                  description: >
+                    Outgoing events counter.
+                - name: filtered
+                  type: long
+                  description: >
+                    Filtered events counter.
+
 - key: memcached
   title: "Memcached"
   description: >
-    []beta
-
     Memcached module
   short_config: false
+  release: beta
   fields:
     - name: memcached
       type: group
@@ -3365,6 +4212,7 @@
           type: group
           description: >
             stats
+          release: beta
           fields:
             - name: pid
               type: long
@@ -3451,17 +4299,124 @@
   description: >
     Metrics collected from MongoDB servers.
   short_config: false
+  release: ga
   fields:
     - name: mongodb
       type: group
       description: >
         MongoDB metrics.
       fields:
+        - name: collstats
+          type: group
+          description: >
+            MongoDB collection statistics metrics.
+          release: ga
+          fields:
+            - name: db
+              type: keyword
+              description: >
+                Database name.
+
+            - name: collection
+              type: keyword
+              description: >
+                Collection name.
+
+            - name: name
+              type: keyword
+              description: >
+                Combination of database and collection name.
+
+            - name: total.time.us
+              type: long
+              description: >
+                Total waiting time for locks in microseconds.
+            - name: total.count
+              type: long
+              description: >
+                Total number of lock wait events.
+
+            - name: lock
+              type: group
+              fields:
+                - name: read.time.us
+                  type: long
+                  description: >
+                    Time waiting for read locks in microseconds.
+                - name: read.count
+                  type: long
+                  description: >
+                    Number of read lock wait events.
+
+                - name: write.time.us
+                  type: long
+                  description: >
+                    Time waiting for write locks in microseconds.
+                - name: write.count
+                  type: long
+                  description: >
+                    Number of write lock wait events.
+
+            - name: queries.time.us
+              type: long
+              description: >
+                Time running queries in microseconds.
+            - name: queries.count
+              type: long
+              description: >
+                Number of queries executed.
+
+            - name: getmore.time.us
+              type: long
+              description: >
+                Time asking for more cursor rows in microseconds.
+            - name: getmore.count
+              type: long
+              description: >
+                Number of times a cursor asked for more data.
+
+            - name: insert.time.us
+              type: long
+              description: >
+                Time inserting new documents in microseconds.
+            - name: insert.count
+              type: long
+              description: >
+                Number of document insert events.
+
+            - name: update.time.us
+              type: long
+              description: >
+                Time updating documents in microseconds.
+            - name: update.count
+              type: long
+              description: >
+                Number of document update events.
+
+            - name: remove.time.us
+              type: long
+              description: >
+                Time deleting documents in microseconds.
+            - name: remove.count
+              type: long
+              description: >
+                Number of document delete events.
+
+            - name: commands.time.us
+              type: long
+              description: >
+                Time executing database commands in microseconds.
+            - name: commands.count
+              type: long
+              description: >
+                Number of database commands executed.
+
         - name: dbstats
           type: group
           description: >
             dbstats provides an overview of a particular mongo database. This document
             is most concerned with data volumes of a database.
+          release: ga
           fields:
             - name: avg_obj_size.bytes
               type: long
@@ -3524,6 +4479,7 @@
           type: group
           description: >
             MongoDB server status metrics.
+          release: ga
           fields:
             - name: version
               type: keyword
@@ -3947,11 +4903,27 @@
                       description: >
                         Number of sync operations.
 
+- key: munin
+  title: "Munin"
+  description: >
+    experimental[]
+
+    Munin node metrics exporter
+  release: experimental
+  fields:
+    - name: munin
+      type: group
+      description: >
+          munin contains metrics exposed by a munin node agent
+      fields:
+        - release: experimental
+
 - key: mysql
   title: "MySQL"
   description: >
     MySQL server status metrics collected from MySQL.
   short_config: false
+  release: ga
   fields:
     - name: mysql
       type: group
@@ -3963,6 +4935,7 @@
           type: group
           description: >
             `status` contains the metrics that were obtained by the status SQL query.
+          release: ga
           fields:
             - name: aborted
               type: group
@@ -4126,6 +5099,8 @@
   description: >
     Nginx server status metrics collected from various modules.
   short_config: false
+  release: ga
+  settings: ["ssl"]
   fields:
     - name: nginx
       type: group
@@ -4136,6 +5111,7 @@
           type: group
           description: >
             `stubstatus` contains the metrics that were scraped from the ngx_http_stub_status_module status page.
+          release: ga
           fields:
             - name: hostname
               type: keyword
@@ -4179,12 +5155,14 @@
                 The current number of idle client connections waiting for a request.
 
 - key: php_fpm
-  title: "PHP-FPM"
+  title: "PHP_FPM"
   description: >
     beta[]
 
     PHP-FPM server status metrics collected from PHP-FPM.
   short_config: false
+  release: beta
+  settings: ["ssl"]
   fields:
     - name: php_fpm
       type: group
@@ -4197,11 +5175,16 @@
           description: >
             `pool` contains the metrics that were obtained from the PHP-FPM process
             pool.
+          release: beta
           fields:
             - name: name
               type: keyword
               description: >
                 The name of the pool.
+            - name: process_manager
+              type: keyword
+              description: >
+                Static, dynamic or ondemand.
             - name: connections
               type: group
               description: >
@@ -4223,6 +5206,15 @@
                   keep this number low. This property follows from the fact that
                   PHP-FPM listens via a socket (TCP or file based), and thus inherits
                   some of the characteristics of sockets.
+              - name: max_listen_queue
+                type: long
+                description: >
+                  The maximum number of requests in the queue of pending
+                  connections since FPM has started.
+              - name: listen_queue_len
+                type: long
+                description: >
+                  The size of the socket queue of pending connections.
             - name: processes
               type: group
               description: >
@@ -4240,17 +5232,41 @@
                 description: >
                   The number of servers current processing a page - the minimum is `1`
                   (so even on a fully idle server, the result will be not read `0`).
+              - name: total
+                type: long
+                description: >
+                  The number of idle + active processes.
+              - name: max_active
+                type: long
+                description: >
+                  The maximum number of active processes since FPM has started.
+              - name: max_children_reached
+                type: long
+                description: >
+                  Number of times, the process limit has been reached,
+                  when pm tries to start more children (works only for
+                  pm 'dynamic' and 'ondemand').
             - name: slow_requests
               type: long
               description: >
                 The number of times a request execution time has exceeded
                 `request_slowlog_timeout`.
+            - name: start_since
+              type: long
+              description: >
+                Number of seconds since FPM has started.
+            - name: start_time
+              type: date
+              format: epoch_second
+              description: >
+                The date and time FPM has started.
 
 - key: postgresql
   title: "PostgreSQL"
   description: >
     Metrics collected from PostgreSQL servers.
   short_config: false
+  release: ga
   fields:
     - name: postgresql
       type: group
@@ -4263,6 +5279,7 @@
             One document per server process, showing information related to the current
             activity of that process, such as state and current query. Collected by
             querying pg_stat_activity.
+          release: ga
           fields:
             - name: database.oid
               type: long
@@ -4344,6 +5361,7 @@
           description: >
             Statistics about the background writer process's activity. Collected using the
             pg_stat_bgwriter query.
+          release: ga
           fields:
             - name: checkpoints.scheduled
               type: long
@@ -4400,6 +5418,7 @@
           description: >
             One row per database, showing database-wide statistics. Collected by querying
             pg_stat_database
+          release: ga
           fields:
             - name: oid
               type: long
@@ -4493,20 +5512,22 @@
 - key: prometheus
   title: "Prometheus"
   description: >
-    beta[]
-    
     Stats collected from Prometheus.
   short_config: false
+  release: beta
+  settings: ["ssl"]
   fields:
     - name: prometheus
       type: group
       description: >
       fields:
+        - release: beta
 
         - name: stats
           type: group
           description: >
             Stats about the Prometheus server.
+          release: beta
           fields:
             - name: notifications
               type: group
@@ -4533,18 +5554,95 @@
 - key: rabbitmq
   title: "RabbitMQ"
   description: >
-    []experimental
-
     RabbitMQ module
+  release: beta
+  settings: ["ssl"]
   fields:
     - name: rabbitmq
       type: group
       description: >
       fields:
+        - name: connection
+          type: group
+          description: >
+            connection
+          release: beta
+          fields:
+            - name: name
+              type: keyword
+              description: >
+                The name of the connection with non-ASCII characters escaped as in C.
+            - name: vhost
+              type: keyword
+              description: >
+                Virtual host name with non-ASCII characters escaped as in C.
+            - name: user
+              type: keyword
+              description: >
+                User name.
+            - name: node
+              type: keyword
+              description: >
+                Node name.
+            - name: channels
+              type: long
+              description: >
+                The number of channels on the connection.
+            - name: channel_max
+              type: long
+              description: >
+                The maximum number of channels allowed on the connection.
+            - name: frame_max
+              type: long
+              description: >
+                Maximum permissible size of a frame (in bytes) to negotiate with clients.
+              format: bytes
+            - name: type
+              type: keyword
+              description: >
+                Type of the connection.
+            - name: host
+              type: keyword
+              description: >
+                Server hostname obtained via reverse DNS, or its IP address if reverse DNS failed or was disabled.
+            - name: peer.host
+              type: keyword
+              description: >
+                Peer hostname obtained via reverse DNS, or its IP address if reverse DNS failed or was not enabled.
+            - name: port
+              type: long
+              description: >
+                Server port.
+            - name: peer.port
+              type: long
+              description: >
+                Peer port.
+            - name: packet_count.sent
+              type: long
+              description: >
+                Number of packets sent on the connection.
+            - name: packet_count.received
+              type: long
+              description: >
+                Number of packets received on the connection.
+            - name: packet_count.pending
+              type: long
+              description: >
+                Number of packets pending on the connection.
+            - name: octet_count.sent
+              type: long
+              description: >
+                Number of octets sent on the connection.
+            - name: octet_count.received
+              type: long
+              description: >
+                Number of octets received on the connection.
+
         - name: node
           type: group
           description: >
             node
+          release: beta
           fields:
             - name: disk.free.bytes
               type: long
@@ -4564,7 +5662,7 @@
               type: long
               description: >
                 Used file descriptors.
-            - name: gc.num.count  
+            - name: gc.num.count
               type: long
               description: >
                 Number of GC operations.
@@ -4630,12 +5728,12 @@
             - name: mem.limit.bytes
               type: long
               description: >
-                Point at which the memory alarm will go off. 
+                Point at which the memory alarm will go off.
               format: bytes
             - name: mem.used.bytes
               type: long
               description: >
-                Memory used in bytes. 
+                Memory used in bytes.
             - name: mnesia.disk.tx.count
               type: long
               description: >
@@ -4644,14 +5742,14 @@
               type: long
               description: >
                 Number of Mnesia transactions which have been performed that did not require writes to disk.
-            - name: msg.store_read.count 
+            - name: msg.store_read.count
               type: long
               description: >
-                Number of messages which have been read from the message store. 
+                Number of messages which have been read from the message store.
             - name: msg.store_write.count
               type: long
               description: >
-                Number of messages which have been written to the message store. 
+                Number of messages which have been written to the message store.
             - name: name
               type: keyword
               description: >
@@ -4668,26 +5766,26 @@
               type: long
               description: >
                 Number of cores detected and usable by Erlang.
-            - name: queue.index.journal_write.count 
+            - name: queue.index.journal_write.count
               type: long
               description: >
                 Number of records written to the queue index journal.
             - name: queue.index.read.count
               type: long
               description: >
-                Number of records read from the queue index. 
-            - name: queue.index.write.count 
+                Number of records read from the queue index.
+            - name: queue.index.write.count
               type: long
               description: >
-                Number of records written to the queue index. 
-            - name: run.queue 
+                Number of records written to the queue index.
+            - name: run.queue
               type: long
               description: >
-                Average number of Erlang processes waiting to run. 
+                Average number of Erlang processes waiting to run.
             - name: socket.total
               type: long
               description: >
-                File descriptors available for use as sockets. 
+                File descriptors available for use as sockets.
             - name: socket.used
               type: long
               description: >
@@ -4701,10 +5799,88 @@
               description: >
                 Node uptime.
 
+        - name: queue
+          type: group
+          description: >
+            queue
+          release: beta
+          fields:
+            - name: name
+              type: keyword
+              description: >
+                The name of the queue with non-ASCII characters escaped as in C.
+            - name: vhost
+              type: keyword
+              description: >
+                Virtual host name with non-ASCII characters escaped as in C.
+            - name: durable
+              type: boolean
+              description: >
+                Whether or not the queue survives server restarts.
+            - name: auto_delete
+              type: boolean
+              description: >
+                Whether the queue will be deleted automatically when no longer used.
+            - name: exclusive
+              type: boolean
+              description: >
+                Whether the queue is exclusive (i.e. has owner_pid).
+            - name: node
+              type: keyword
+              description: >
+                Node name.
+            - name: state
+              type: keyword
+              description: >
+                The state of the queue. Normally 'running', but may be "{syncing, MsgCount}" if the queue is synchronising. Queues which are located on cluster nodes that are currently down will be shown with a status of 'down'.
+            - name: arguments.max_priority
+              type: long
+              description: >
+                Maximum number of priority levels for the queue to support.
+            - name: consumers.count
+              type: long
+              description: >
+                Number of consumers.
+            - name: consumers.utilisation.pct
+              type: long
+              format: percentage
+              description: >
+                Fraction of the time (between 0.0 and 1.0) that the queue is able to immediately deliver messages to consumers. This can be less than 1.0 if consumers are limited by network congestion or prefetch count.
+            - name: messages.total.count
+              type: long
+              description: >
+                Sum of ready and unacknowledged messages (queue depth).
+            - name: messages.ready.count
+              type: long
+              description: >
+                Number of messages ready to be delivered to clients.
+            - name: messages.unacknowledged.count
+              type: long
+              description: >
+                Number of messages delivered to clients but not yet acknowledged.
+            - name: messages.persistent.count
+              type: long
+              description: >
+                Total number of persistent messages in the queue (will always be 0 for transient queues).
+            - name: memory.bytes
+              type: long
+              format: bytes
+              description: >
+                Bytes of memory consumed by the Erlang process associated with the queue, including stack, heap and internal structures.
+            - name: disk.reads.count
+              type: long
+              description: >
+                Total number of times messages have been read from disk by this queue since it started.
+            - name: disk.writes.count
+              type: long
+              description: >
+                Total number of times messages have been written to disk by this queue since it started.
+
 - key: redis
   title: "Redis"
   description: >
     Redis metrics collected from Redis.
+  release: ga
   fields:
     - name: redis
       type: group
@@ -4715,6 +5891,7 @@
           type: group
           description: >
             `info` contains the information and statistics returned by the `INFO` command.
+          release: ga
           fields:
             - name: clients
               type: group
@@ -5072,6 +6249,7 @@
           type: group
           description: >
             `keyspace` contains the information about the keyspaces returned by the `INFO` command.
+          release: ga
           fields:
             - name: id
               type: keyword
@@ -5097,6 +6275,7 @@
   description: >
     System status metrics, like CPU and memory usage, that are collected from the operating system.
   short_config: true
+  release: ga
   fields:
     - name: system
       type: group
@@ -5107,6 +6286,7 @@
           type: group
           description: >
             `system-core` contains CPU metrics for a single core of a multi-core system.
+          release: ga
           fields:
             - name: id
               type: long
@@ -5210,6 +6390,7 @@
           type: group
           description: >
             `cpu` contains local CPU stats.
+          release: ga
           fields:
             - name: cores
               type: long
@@ -5336,6 +6517,13 @@
                 The percentage of CPU time spent in non-idle state.
 
 
+            # Total
+            - name: total.value
+              type: long
+              description: >
+                The value of CPU usage since starting the process.
+
+
             # Ticks
             - name: user.ticks
               type: long
@@ -5383,6 +6571,7 @@
           type: group
           description: >
             `disk` contains disk IO metrics collected from the operating system.
+          release: ga
           fields:
             - name: name
               type: keyword
@@ -5436,10 +6625,68 @@
               description: >
                 The total number of of milliseconds spent doing I/Os.
 
+            - name: iostat.read.request.merges_per_sec
+              type: float
+              description: >
+                  The number of read requests merged per second that were queued to the device.
+
+            - name: iostat.write.request.merges_per_sec
+              type: float
+              description: >
+                  The number of write requests merged per second that were queued to the device.
+
+            - name: iostat.read.request.per_sec
+              type: float
+              description: >
+                  The number of read requests that were issued to the device per second
+
+            - name: iostat.write.request.per_sec
+              type: float
+              description: >
+                  The number of write requests that were issued to the device per second
+
+            - name: iostat.read.per_sec.bytes
+              type: float
+              description: >
+                  The number of Bytes read from the device per second.
+              format: bytes
+
+            - name: iostat.write.per_sec.bytes
+              type: float
+              description: >
+                  The number of Bytes write from the device per second.
+              format: bytes
+
+            - name: iostat.request.avg_size
+              type: float
+              description: >
+                  The average size (in sectors) of the requests that were issued to the device.
+
+            - name: iostat.queue.avg_size
+              type: float
+              description: >
+                  The average queue length of the requests that were issued to the device.
+
+            - name: iostat.await
+              type: float
+              description: >
+                  The average time spent for requests issued to the device to be served.
+
+            - name: iostat.service_time
+              type: float
+              description: >
+                  The average service time (in milliseconds) for I/O requests that were issued to the device.
+
+            - name: iostat.busy
+              type: float
+              description: >
+                  Percentage of CPU time during which I/O requests were issued to the device (bandwidth utilization for the device). Device saturation occurs when this value is close to 100%.
+
         - name: filesystem
           type: group
           description: >
             `filesystem` contains local filesystem stats.
+          release: ga
           fields:
             - name: available
               type: long
@@ -5493,7 +6740,8 @@
           type: group
           description: >
             `system.fsstat` contains filesystem metrics aggregated from all mounted
-            filesystems, similar with what `df -a` prints out.
+            filesystems.
+          release: ga
           fields:
             - name: count
               type: long
@@ -5526,6 +6774,7 @@
           type: group
           description: >
             CPU load averages.
+          release: ga
           fields:
             - name: "1"
               type: scaled_float
@@ -5570,6 +6819,7 @@
           type: group
           description: >
             `memory` contains local memory stats.
+          release: ga
           fields:
             - name: total
               type: long
@@ -5608,7 +6858,7 @@
                   description: >
                     Actual used memory in bytes. It represents the difference between the total and the available memory. The
                     available memory depends on the OS. For more details, please check `system.actual.free`.
- 
+
                 - name: free
                   type: long
                   format: bytes
@@ -5652,10 +6902,58 @@
                   description: >
                     The percentage of used swap memory.
 
+            - name: hugepages
+              type: group
+              prefix: "[float]"
+              description: This group contains statistics related to huge pages usage on the system.
+              fields:
+                - name: total
+                  type: long
+                  format: number
+                  description: >
+                    Number of huge pages in the pool.
+
+                - name: used.bytes
+                  type: long
+                  format: bytes
+                  description: >
+                    Memory used in allocated huge pages.
+
+                - name: used.pct
+                  type: long
+                  format: percent
+                  description: >
+                    Percentage of huge pages used.
+
+                - name: free
+                  type: long
+                  format: number
+                  description: >
+                    Number of available huge pages in the pool.
+
+                - name: reserved
+                  type: long
+                  format: number
+                  description: >
+                    Number of reserved but not allocated huge pages in the pool.
+
+                - name: surplus
+                  type: long
+                  format: number
+                  description: >
+                    Number of overcommited huge pages.
+
+                - name: default_size
+                  type: long
+                  format: bytes
+                  description: >
+                    Default size for huge pages.
+
         - name: network
           type: group
           description: >
             `network` contains network IO metrics for a single network interface.
+          release: ga
           fields:
             - name: name
               type: keyword
@@ -5710,6 +7008,7 @@
           type: group
           description: >
             `process` contains process metadata, CPU metrics, and memory metrics.
+          release: ga
           fields:
             - name: name
               type: keyword
@@ -5759,10 +7058,14 @@
               prefix: "[float]"
               description: CPU-specific statistics per process.
               fields:
-                - name: user
+                - name: user.ticks
                   type: long
                   description: >
                     The amount of CPU time the process spent in user space.
+                - name: total.value
+                  type: long
+                  description: >
+                    The value of CPU usage since starting the process.
                 - name: total.pct
                   type: scaled_float
                   format: percent
@@ -5776,7 +7079,7 @@
                     The percentage of CPU time spent by the process since the last event.
                     This value is normalized by the number of CPU cores and it ranges
                     from 0 to 100%.
-                - name: system
+                - name: system.ticks
                   type: long
                   description: >
                     The amount of CPU time the process spent in kernel space.
@@ -6208,6 +7511,7 @@
           type: group
           description: >
             Summary metrics for the processes running on the host.
+          release: ga
           fields:
             - name: total
               type: long
@@ -6238,10 +7542,42 @@
               description: >
                 Number of processes for which the state couldn't be retrieved or is unknown.
 
+        - name: raid
+          type: group
+          description: >
+            raid
+          release: beta
+          fields:
+            - name: name
+              type: keyword
+              description: >
+                Name of the device.
+            - name: activity_state
+              type: keyword
+              description: >
+                activity-state of the device.
+            - name: disks.active
+              type: long
+              description: >
+                 Number of active disks.
+            - name: disks.total
+              type: long
+              description: >
+                Total number of disks the device consists of.
+            - name: blocks.total
+              type: long
+              description: >
+                Number of blocks the device holds.
+            - name: blocks.synced
+              type: long
+              description: >
+                Number of blocks on the device that are in sync.
+
         - name: socket
           type: group
           description: >
             TCP sockets that are active.
+          release: beta
           fields:
             - name: direction
               type: keyword
@@ -6330,10 +7666,157 @@
               description: >
                 Name of the user running the process.
 
+        - name: uptime
+          type: group
+          description: >
+            `uptime` contains the operating system uptime metric.
+          release: ga
+          fields:
+            - name: duration.ms
+              type: long
+              format: duration
+              input_format: milliseconds
+              description: >
+                The OS uptime in milliseconds.
+
+- key: uwsgi
+  title: "uwsgi"
+  description: >
+    uwsgi module
+  release: beta
+  fields:
+    - name: uwsgi
+      type: group
+      description: >
+      fields:
+        - name: status
+          type: group
+          release: beta
+          description: >
+            uwsgi.status metricset fields
+          fields:
+            - name: total.requests
+              type: long
+              description: >
+                Total requests handled
+            - name: total.exceptions
+              type: long
+              description: >
+                Total exceptions
+            - name: total.write_errors
+              type: long
+              description: >
+                Total requests write errors
+            - name: total.read_errors
+              type: long
+              description: >
+                Total read errors
+            - name: total.pid
+              type: long
+              description: >
+                Process id
+            - name: worker.id
+              type: long
+              description: >
+                Worker id
+            - name: worker.pid
+              type: long
+              description: >
+                Worker process id
+            - name: worker.accepting
+              type: long
+              description: >
+                State of worker, 1 if still accepting new requests otherwise 0
+            - name: worker.requests
+              type: long
+              description: >
+                Number of requests served by this worker
+            - name: worker.delta_requests
+              type: long
+              description: >
+                Number of requests served by this worker after worker is reloaded when reached MAX_REQUESTS
+            - name: worker.exceptions
+              type: long
+              description: >
+                Exceptions raised
+            - name: worker.harakiri_count
+              type: long
+              description: >
+                Dropped requests by timeout
+            - name: worker.signals
+              type: long
+              description: >
+                Emitted signals count
+            - name: worker.signal_queue
+              type: long
+              description: >
+                Number of signals waiting to be handled
+            - name: worker.status
+              type: keyword
+              description: >
+                Worker status (cheap, pause, sig, busy, idle)
+            - name: worker.rss
+              type: keyword
+              description: >
+                Resident Set Size. memory currently used by a process. if always zero try `--memory-report` option of uwsgi
+            - name: worker.vsz
+              type: long
+              description: >
+                Virtual Set Size. memory size assigned to a process. if always zero try `--memory-report` option of uwsgi
+            - name: worker.running_time
+              type: long
+              description: >
+                Process running time
+            - name: worker.respawn_count
+              type: long
+              description: >
+                Respawn count
+            - name: worker.tx
+              type: long
+              description: >
+                Transmitted size
+            - name: worker.avg_rt
+              type: long
+              description: >
+                Average response time
+            - name: core.id
+              type: long
+              description: >
+                worker ID
+            - name: core.worker_pid
+              type: long
+              description: >
+                Parent worker PID
+            - name: core.requests.total
+              type: long
+              description: >
+                Number of total requests served
+            - name: core.requests.static
+              type: long
+              description: >
+                Number of static file serves
+            - name: core.requests.routed
+              type: long
+              description: >
+                Routed requests
+            - name: core.requests.offloaded
+              type: long
+              description: >
+                Offloaded requests
+            - name: core.write_errors
+              type: long
+              description: >
+                Number of failed writes
+            - name: core.read_errors
+              type: long
+              description: >
+                Number of failed reads
+
 - key: vsphere
   title: "vSphere"
   description: >
     vSphere module
+  release: beta
   fields:
     - name: vsphere
       type: group
@@ -6343,11 +7826,8 @@
           type: group
           description: >
             datastore
+          release: beta
           fields:
-            - name: datacenter
-              type: keyword
-              description: >
-                Datacenter name
             - name: name
               type: keyword
               description: >
@@ -6357,7 +7837,7 @@
               description: >
                 Filesystem type
             - name: capacity.total.bytes
-              type: long      
+              type: long
               description: >
                 Total bytes of the datastore
               format: bytes
@@ -6382,11 +7862,8 @@
           type: group
           description: >
             host
+          release: beta
           fields:
-            - name: datacenter
-              type: keyword
-              description: >
-                Datacenter name
             - name: name
               type: keyword
               description: >
@@ -6418,16 +7895,21 @@
               description: >
                 Free Memory in bytes
               format: bytes
+            - name: network_names
+              type: keyword
+              description: >
+                Network names
 
         - name: virtualmachine
           type: group
           description: >
             virtualmachine
+          release: beta
           fields:
-            - name: datacenter
+            - name: host
               type: keyword
               description: >
-                Datacenter name
+                Host name
             - name: name
               type: keyword
               description: >
@@ -6459,26 +7941,90 @@
             - name: custom_fields
               type: object
               object_type: keyword
-              descripton: >
-                Custom fields      
+              description: >
+                Custom fields
+            - name: network_names
+              type: keyword
+              description: >
+                Network names
 
 - key: windows
   title: "Windows"
   description: >
-    []beta
+    beta[]
     Module for Windows
   short_config: false
+  release: beta
   fields:
     - name: windows
       type: group
       description: >
       fields:
+        - release: beta
+
+        - name: service
+          type: group
+          description: >
+            `service` contains the status for Windows services.
+          release: beta
+          fields:
+            - name: id
+              type: keyword
+              example: hW3NJFc1Ap
+              description: >
+                A unique ID for the service. It is a hash of the machine's GUID and the
+                service name.
+
+            - name: name
+              type: keyword
+              example: Wecsvc
+              description: >
+                The service name.
+
+            - name: display_name
+              type: keyword
+              example: Windows Event Collector
+              description: >
+                The display name of the service.
+
+            - name: start_type
+              type: keyword
+              description: >
+                The startup type of the service. The possible values are `Automatic`,
+                `Boot`, `Disabled`, `Manual`, and `System`.
+
+            - name: state
+              type: keyword
+              description: >
+                The actual state of the service. The possible values are `Continuing`,
+                `Pausing`, `Paused`, `Running`, `Starting`, `Stopping`, and `Stopped`.
+
+            - name: exit_code
+              type: keyword
+              description: >
+                For `Stopped` services this is the error code that service reports
+                when starting to stopping. This will be the generic Windows service
+                error code unless the service provides a service-specific error code.
+
+            - name: pid
+              type: long
+              example: 1092
+              description: >
+                For `Running` services this is the associated process PID.
+
+            - name: uptime.ms
+              type: long
+              format: duration
+              input_format: milliseconds
+              description: >
+                The service's uptime specified in milliseconds.
 
 - key: zookeeper
   title: "ZooKeeper"
   description: >
     ZooKeeper metrics collected by the four-letter monitoring commands.
   short_config: false
+  release: ga
   fields:
     - name: zookeeper
       type: group
@@ -6491,6 +8037,7 @@
           description: >
             `mntr` contains the metrics reported by the four-letter `mntr`
             command.
+          release: ga
           fields:
             - name: hostname
               type: keyword
