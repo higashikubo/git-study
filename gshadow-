@@ -48,3 +48,4 @@ logstash:!::
 kibana:!::
 printadmin:!::
 nginx:!::
+oprofile:!::
